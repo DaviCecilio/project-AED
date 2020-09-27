@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <locale.h>
-#include <math.h>
 
 void clrscr ();
 int menu ();
@@ -23,13 +21,14 @@ Employee_Data *initialize(void)
 }
 
     Employee_Data *InsertEmployeeInList(Employee_Data *l, int newId, char *newName, float newSalary) {
-        
+
         Employee_Data *newEmployee = (Employee_Data *)malloc(sizeof(Employee_Data));
-        
+
+
         newEmployee->id = newId;
         newEmployee->name = newName;
         newEmployee->salary = newSalary;
-        
+
         newEmployee->prev = NULL;
         newEmployee->next = l;
         if (l != NULL)
@@ -37,42 +36,45 @@ Employee_Data *initialize(void)
 
         return newEmployee;
     }
-    
+
     Employee_Data *InsertEmployee(Employee_Data *l)
     {
         struct employee_Data *aux;
-        
+
         int lastId;
-        
+
         for(aux=l; aux!= NULL; aux = aux->next) {
             if (aux->next == NULL){
                 lastId = aux->id;
             }
         }
-        
+
         int newId = lastId + 1;
-        char newName[125];
+        char newName[30];
         float newSalary;
-        
-        printf ("\n\n -- CADASTRO DE FUNCIONARIO -- \n\n"); 
-        
+
+        printf ("\n\n -- CADASTRO DE FUNCIONARIO -- \n\n");
+
         printf("\n Digite o nome do funcionário: ");
         scanf("%s", newName);
-        
+
         printf("\n Digite o salario do funcionário: ");
         scanf("%f", &newSalary);
-        
-    
+
+
     return InsertEmployeeInList(l, newId, newName, newSalary);
 }
 
 void GetAllEmployee (Employee_Data *l) {
 
-  Employee_Data *aux; 
+  Employee_Data *aux;
 
   printf ("\n\n -- LISTAGEM DE FUNCIONARIOS --");
 
-  for(aux=l; aux!= NULL; aux = aux->next)	
+  if(l == NULL){
+      printf ("\n\n Não existem FUNCIONARIOS cadastrados no sistema.");
+  }else{
+       for(aux=l; aux!= NULL; aux = aux->next)
     {
       printf ("\n\n ---------------------");
       printf ("\n\n Matricula: %d", aux->id);
@@ -80,33 +82,34 @@ void GetAllEmployee (Employee_Data *l) {
       printf ("\n Salario: %f", aux->salary);
       printf ("\n\n---------------------");
     }
+  }
 }
 
 void GetEmployeeById(Employee_Data *l) {
-    
-    Employee_Data *aux; 
+
+    Employee_Data *aux;
     int selectedId;
     int flag = 0;
 
   printf ("\n\n -- PESQUISA DE FUNCIONARIOS --");
-  
+
   printf ("\n\n Digite um id: ");
   scanf("%d", &selectedId);
-  
-  
+
+
    for(aux=l; aux!= NULL; aux = aux->next)	{
       if(selectedId == aux->id) {
-          
+
        flag = 1;
-       
+
        printf ("\n\n Encontramos esse resultado para a pesquisa: ");
-       
+
 	   printf ("\n\n ---------------------");
-	   
-	   printf ("\n\n Matricula: %d", aux->id);
+
+	   printf ("\n\n ID: %d", aux->id);
 	   printf ("\n Nome: %s", aux->name);
 	   printf ("\n Salario: %f", aux->salary);
-	   
+
 	   printf ("\n\n---------------------");
       }
     }
@@ -119,37 +122,43 @@ void GetEmployeeById(Employee_Data *l) {
 Employee_Data* DeleteEmployeeById (Employee_Data *l)
 {
   Employee_Data *aux;
-  int flag = 0;
   int selectedId;
-  
+
   printf ("\n\n -- REMOVER FUNCIONARIO --");
-  
+
   printf ("\n\n Digite um id: ");
   scanf("%d", &selectedId);
 
-  for(aux=l; aux!= NULL; aux = aux->next)
-    {
-      if (aux->id == selectedId) {
-
-	  printf ("\n\n O funcionario, %d, foi REMOVIDO! \n", aux->id);
-
-	  aux->prev->next = aux->next;
-	  aux->next->prev = aux->prev;
-
-	  aux = NULL;
-	  flag = 1;
-
-	  } else {
-	  l = aux->next;
-	    }
+  for(aux=l; aux != NULL; aux = aux->next){
+    if(aux->id == selectedId){
+        break;
     }
+  }
 
-  free (aux);
-  if (flag == 0)
-    {
-      printf ("Funcionario %d nao existe!\n", selectedId);
-    }
+  if(aux == NULL){
+    printf("\n\n---- Funcionario nao encontrado... ----\n\n");
     return l;
+  }
+
+  if(aux->next != NULL){
+    aux->next->prev = aux->prev;
+  }
+
+  if(aux->prev != NULL){
+    aux->prev->next = aux->next;
+  }
+  else{
+    l = aux->next;
+  }
+  printf ("\n\n O funcionario, %d, foi REMOVIDO! \n", aux->id);
+  free(aux);
+  return l;
+}
+
+void enterToContinue(void){
+    printf ( "Press enter to continue..." );
+    fflush ( stdout );
+    getchar();
 }
 
 
@@ -217,6 +226,3 @@ int main ()
   return 0;
 
 }
-
-
-
