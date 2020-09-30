@@ -41,19 +41,14 @@ Employee_Data *initialize(void)
     {
         struct employee_Data *aux;
 
-        int lastId;
-
-        for(aux=l; aux!= NULL; aux = aux->next) {
-            if (aux->next == NULL){
-                lastId = aux->id;
-            }
-        }
-
-        int newId = lastId + 1;
+        int newId;
         char newName[30];
         float newSalary;
 
         printf ("\n\n -- CADASTRO DE FUNCIONARIO -- \n\n");
+        
+        printf("\n Digite a matricula: ");
+        scanf("%d", &newId);
 
         printf("\n Digite o nome do funcionário: ");
         scanf("%s", newName);
@@ -154,13 +149,6 @@ Employee_Data* DeleteEmployeeById (Employee_Data *l)
   free(aux);
   return l;
 }
-
-void enterToContinue(void){
-    printf ( "Press enter to continue..." );
-    fflush ( stdout );
-    getchar();
-}
-
 
 void clrscr () {
   system ("cls||clear");
